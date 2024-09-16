@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facial Recognition Login</title>
+    <style>
+        video, canvas {
+            display: block;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h2>Login with Facial Recognition</h2>
+    <form id="facial-recognition-form">
+        <label for="username">Username or Email</label>
+        <input type="text" id="username" name="username" placeholder="Username or Email" required>
+
+        <div>
+            <video id="video" width="320" height="240" autoplay></video>
+            <button type="button" id="capture">Capture Photo</button>
+            <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+        </div>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <script>
+        // Acceder a la cámara y mostrar el video en el elemento <video>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const captureButton = document.getElementById('capture');
+        let imageData = null;
+
+        // Solicita acceso a la cámara
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+            })
+            .catch(err => {
+                console.error('Error accessing camera: ', err);
+                alert('Could not access the camera. Please check your device settings.');
+            });
+
+        // Al hacer clic en el botón "Capture Photo", se captura el cuadro de video y se dibuja en el <canvas>
+        captureButton.addEventListener('click', () => {
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            imageData = canvas.toDataURL('image/jpeg'); // Convierte la imagen en base64
+            alert("Photo captured! Now you can submit the form.");
+        });
+
+        // Enviar la imagen capturada junto con el username/email al backend
+        document.getElementById('facial-recognition-form').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+
+            if (!imageData || !username) {
+                alert("Please capture a photo and provide a username/email");
+                return;
+            }
+
+            // Convertir base64 a archivo
+            const blob = await fetch(imageData).then(res => res.blob());
+            const file = new File([blob], "photo.jpg", { type: "image/jpeg" });
+
+            const formData = new FormData();
+            formData.append('image', file);
+            formData.append('username', username);
+   
+
+            try {
+                const response = await fetch('http://localhost:5000/api/users/facial-recognition/auth', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+
+                if (data.status) {
+                    alert("Login successful");
+                } else {
+                    alert("Login failed: " + data.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred during login');
+            }
+        });
+    </script>
+</body>
+</html>
