@@ -58,7 +58,7 @@ const HomePage = () => {
             <button onClick={() => handleComponentChange('textExtractor')} className={styles.button}>
               Extraer texto
             </button>
-            <button onClick={() => handleComponentChange('accountSettings')} className={styles.button}>
+            <button onClick={() => router.push('/account')} className={styles.button}>
               Configuración de la cuenta
             </button>
             <button onClick={handleLogout} className={styles.button}>
