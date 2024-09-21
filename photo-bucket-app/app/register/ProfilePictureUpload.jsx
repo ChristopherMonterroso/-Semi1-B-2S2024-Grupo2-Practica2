@@ -3,7 +3,7 @@ import styles from './ProfilePictureUpload.module.css';
 
 const ProfilePictureUpload = ({ onImageChange }) => {
   const [imagePreview, setImagePreview] = useState(null);
-  const fileInputRef = useRef(null); // Para referenciar el input de archivo
+  const fileInputRef = useRef(null);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -19,7 +19,7 @@ const ProfilePictureUpload = ({ onImageChange }) => {
 
   const handleButtonClick = () => {
     if (fileInputRef.current) {
-      fileInputRef.current.click(); // Simula un clic en el input de archivo
+      fileInputRef.current.click();
     }
   };
 
