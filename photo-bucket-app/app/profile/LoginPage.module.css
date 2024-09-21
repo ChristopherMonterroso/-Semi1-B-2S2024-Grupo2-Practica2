@@ -1,0 +1,21 @@
+.container {
+    display: flex;
+    height: 100vh;
+    background-color: #000
+  }
+  
+  .imageContainer {
+    flex: 1;
+    background-image: url('/fondo.jpg');
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .formContainer {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  
