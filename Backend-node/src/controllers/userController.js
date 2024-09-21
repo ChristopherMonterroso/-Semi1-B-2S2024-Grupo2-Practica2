@@ -4,6 +4,7 @@ const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const Album = require("../models/albums")
 const Image = require("../models/images");
+const FacialRecognition = require("../models/facialRecognition")
 AWS.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -98,33 +99,45 @@ exports.getUserProfile = async (req, res) => {
 };
 
 exports.deleteUser = async (req, res) => {
+  const { id_user } = req.params;
+  const { password } = req.body;
+
   try {
-    const { id_user } = req.params;
-    const { password } = req.body;
     if (!id_user) {
-      return res
-        .status(400)
-        .json({ message: "User ID is required", status: false });
+      return res.status(400).json({ message: "User ID is required", status: false });
     }
     if (!password) {
-      return res
-        .status(400)
-        .json({ message: "Password is required", status: false });
+      return res.status(400).json({ message: "Password is required", status: false });
     }
+
     const user = await User.findByPk(id_user);
     if (!user) {
       return res.status(404).json({ message: "User not found", status: false });
     }
+
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
-      return res
-        .status(400)
-        .json({ message: "Invalid password", status: false });
+      return res.status(400).json({ message: "Invalid password", status: false });
     }
-    await User.destroy({ where: { id_user: id_user } });
-    return res.status(200).json({ message: "User deleted", status: true });
+
+    // Eliminar las entradas de reconocimiento facial asociadas al usuario
+    await FacialRecognition.destroy({ where: { id_user } });
+
+    // Eliminar las imágenes asociadas a los álbumes del usuario
+    const albums = await Album.findAll({ where: { id_user } });
+    for (const album of albums) {
+      // Eliminar imágenes del álbum
+      await Image.destroy({ where: { id_album: album.id_album } });
+      // Eliminar el álbum
+      await Album.destroy({ where: { id_album: album.id_album } });
+    }
+
+    // Eliminar el usuario
+    await User.destroy({ where: { id_user } });
+
+    return res.status(200).json({ message: "User, albums, images, and facial recognition data deleted", status: true });
   } catch (error) {
-    return res.status(500).json({ message: error, status: false });
+    return res.status(500).json({ message: error.message, status: false });
   }
 };
 
