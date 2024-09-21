@@ -6,7 +6,6 @@
   
   .imageContainer {
     flex: 1;
-    background-image: url('/fondo.jpg');
     background-size: cover;
     background-position: center;
   }

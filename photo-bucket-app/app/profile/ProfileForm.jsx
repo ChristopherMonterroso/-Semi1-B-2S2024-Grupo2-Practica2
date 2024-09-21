@@ -58,7 +58,7 @@ const ProfilePage = () => {
   };
 
   const handleRegresar = () => {
-    router.push("/home");
+    router.push("/account");
   };
 
   const handleCancel = () => {
@@ -182,9 +182,6 @@ const ProfilePage = () => {
             <button className={styles.button} onClick={handleRegresar}>
               Regresar
             </button>
-            {/* <button className={styles.button} onClick={Iniciosesion}>
-              iniciar sesion
-            </button> */}
           </>
         )}
 

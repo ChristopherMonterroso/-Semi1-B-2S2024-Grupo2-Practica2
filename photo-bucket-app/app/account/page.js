@@ -10,12 +10,18 @@ const Account = () => {
     router.push('/home'); // Redirige a la página de inicio
   };
 
+  const handleGoToProfile = () => {
+    router.push('/profile'); // Redirige a la página de inicio
+  };
+
   return (
     <div className={styles.accountContainer}>
       <h2>Configuración de la cuenta</h2>
-      
+
       <div className={styles.buttonsContainer}>
-        <button className={styles.button}>
+        <button className={styles.button}
+          onClick={handleGoToProfile}
+        >
           Editar información personal
         </button>
         <button className={styles.button}>
