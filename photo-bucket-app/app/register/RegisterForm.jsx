@@ -1,6 +1,6 @@
-'use client'
+'use client';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation'; // Importa el hook useRouter
+import { useRouter } from 'next/navigation';
 import { register } from '../services/register';
 import styles from './RegisterForm.module.css';
 import ProfilePictureUpload from './ProfilePictureUpload';
@@ -12,15 +12,18 @@ const RegisterForm = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [profilePhoto, setProfilePhoto] = useState(null);
-  const router = useRouter(); // Usa el hook useRouter para redirigir
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password === confirmPassword) {
       try {
         const data = await register(username, email, password, profilePhoto);
-        toast.success('Usuario registrado');
-        router.push('/login');
+        if (data.status) {
+          router.push('/login');
+        } else {
+          toast.error(data.message);
+        }
       } catch (error) {
         toast.error('Error al registrar el usuario');
         console.error(error);
@@ -67,6 +70,10 @@ const RegisterForm = () => {
           className={styles.input}
         />
         <button type="submit" className={styles.button}>Registrarse</button>
+
+        <p className={styles.centerText}>
+            ¿Ya tienes cuenta? <a href="/login">Inicia sesión aquí</a>
+          </p>
       </form>
     </div>
   );

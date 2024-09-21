@@ -45,7 +45,6 @@ const LoginPage = () => {
     <div className={styles.loginContainer}>
       <ToastContainer />
       <div className={styles.title}>PhotoBucket</div>
-      {/* Agrega la imagen del logo aquí */}
       <img src="/images/logo.png" alt="Logo" className={styles.logo} />
       {!isFaceRecognition ? (
         <form className={styles.form} onSubmit={handleSubmit}>
