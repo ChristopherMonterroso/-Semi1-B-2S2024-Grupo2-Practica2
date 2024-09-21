@@ -22,13 +22,13 @@ const LoginPage = () => {
       if (data.status) {
         localStorage.setItem('user', JSON.stringify(data));
         Cookies.set('user', JSON.stringify(data), { expires: 1 });
-        router.push('/home'); // Redirigir a la página de inicio
+        router.push('/home');
       } else {
         toast.error(data.message);
       }
       
     } catch (error) {
-      toast.error('Ocurrió un error, intente de nuevo.  ');
+      toast.error('Ocurrió un error, intente de nuevo.');
       console.error(error);
     }
   };
@@ -41,16 +41,12 @@ const LoginPage = () => {
     setIsFaceRecognition(false);
   };
 
-  const userHasFaceRecognitionConfigured = () => {
-    // Aquí debes implementar la lógica para verificar si el usuario tiene habilitado el reconocimiento facial
-    return false; // Cambia esto según tu lógica
-  };
-
   return (
     <div className={styles.loginContainer}>
       <ToastContainer />
-      <h1>PhotoBucket</h1>
-      <h2>Inicio de sesión</h2>
+      <div className={styles.title}>PhotoBucket</div>
+      {/* Agrega la imagen del logo aquí */}
+      <img src="/images/logo.png" alt="Logo" className={styles.logo} />
       {!isFaceRecognition ? (
         <form className={styles.form} onSubmit={handleSubmit}>
           <input
@@ -73,7 +69,7 @@ const LoginPage = () => {
           <button type="button" onClick={handleFaceRecognitionClick} className={styles.button}>
             Utilizar reconocimiento facial
           </button>
-          <p>
+          <p className={styles.centerText}>
             ¿No tienes una cuenta? <a href="/register">Regístrate aquí</a>
           </p>
         </form>

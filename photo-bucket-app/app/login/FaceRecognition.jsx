@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
-import styles from './FaceRecognition.module.css';
+import styles from './LoginPage.module.css';
 import { loginWithFaceRecognition } from '../services/login';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
@@ -76,9 +76,7 @@ const FaceRecognition = ({ onBackToLogin }) => {
 
   return (
     <div className={styles.faceRecognitionContainer}>
-      <h2>Iniciar sesión con reconocimiento facial</h2>
       <form className={styles.form} onSubmit={handleSubmit}>
-        <label htmlFor="usernameOrEmail">Nombre de usuario o correo electrónico</label>
         <input
           type="text"
           id="usernameOrEmail"
@@ -90,17 +88,18 @@ const FaceRecognition = ({ onBackToLogin }) => {
           className={styles.input}
         />
         
-        <div>
+        <div className={styles.videoContainer}>
           <video ref={videoRef} width="320" height="240" autoPlay className={styles.video}></video>
           <button type="button" onClick={capturePhoto} className={styles.button}>
             Capturar foto
           </button>
           <canvas ref={canvasRef} width="320" height="240" style={{ display: 'none' }}></canvas>
         </div>
+
         
         <button type="submit" className={styles.button}>Iniciar sesión</button>
         <button type="button" onClick={onBackToLogin} className={styles.backButton}>
-          Volver al inicio de sesión
+          Usar contraseña
         </button>
       </form>
     </div>
