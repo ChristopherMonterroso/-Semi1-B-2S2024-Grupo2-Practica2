@@ -12,17 +12,16 @@ const HomePage = () => {
   const [showButtons, setShowButtons] = useState(true); 
   const router = useRouter(); 
 
-  // Obtener la información del usuario desde localStorage
   const user = JSON.parse(localStorage.getItem('user'))?.user;
 
   const handleComponentChange = (component) => {
     setSelectedComponent(component);
-    setShowButtons(false); // Ocultar los botones cuando se selecciona un componente
+    setShowButtons(false);
   };
 
   const handleShowButtons = () => {
-    setSelectedComponent(null); // Reinicia el componente seleccionado
-    setShowButtons(true); // Mostrar los botones nuevamente
+    setSelectedComponent(null);
+    setShowButtons(true);
   };
 
   const handleLogout = () => {
@@ -71,10 +70,10 @@ const HomePage = () => {
               {selectedComponent === 'editAlbum' && <EditAlbum />}
               {selectedComponent === 'uploadImage' && <UploadImage />}
               {selectedComponent === 'textExtractor' && <TextExtractor />}
-              {/* Aquí puedes agregar más componentes según sea necesario */}
+              {/* Aquí se puede agregar más componentes según sea necesario */}
             </div>
             <button onClick={handleShowButtons} className={styles.backButton}>
-              Volver a mostrar los botones
+              Regresar
             </button>
           </>
         )}
