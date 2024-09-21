@@ -10,10 +10,14 @@ import {
   Grid,
 } from "@mui/material";
 import { GetAlbums } from "../services/Albums";
+// import { GetImages } from "../services/Images";
+import Images from "./Images";
 
 const Albumnes = ({ id_user }) => {
   const [imageFile, setImageFile] = useState(null);
   const [albums, setAlbums] = useState([]);
+  const [seealbum, setSeeAlbum] = useState(true);
+  const [carpeta, setCarpeta] = useState(null);
 
   useEffect(() => {
     getAlbums();
@@ -34,16 +38,8 @@ const Albumnes = ({ id_user }) => {
   };
 
   const handleClick = (carpeta) => {
-    alert(`Carpeta seleccionada: ${carpeta.id_album}`);
-  };
-
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file && file.type.startsWith("image/")) {
-      setImageFile(file);
-    } else {
-      alert("Por favor selecciona una imagen válida");
-    }
+    setCarpeta(carpeta);
+    setSeeAlbum(false);
   };
 
   return (
@@ -58,68 +54,75 @@ const Albumnes = ({ id_user }) => {
         backgroundColor: "#011F26",
       }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          mb: 2,
-        }}
-      >
-        <Typography variant="h4" sx={{ color: "white" }}>
-          Albumnes
-        </Typography>
-      </Box>
+      {seealbum ? (
+        <>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 2,
+            }}
+          >
+            <Typography variant="h4" sx={{ color: "white" }}>
+              Albumnes
+            </Typography>
 
-      <Box
-        sx={{
-          display: "flex",
-          overflowY: "scroll",
-          flexDirection: "column",
-          alignItems: "center",
-          backgroundColor: "#011F26",
-          height: "60vh",
-          padding: "20px",
-        }}
-      >
-        <Grid container spacing={3} sx={{ maxWidth: "1000px" }}>
-          {albums.map((carpeta, index) => (
-            <Grid item xs={10} sm={6} md={2} key={index}>
-              <Box
-                sx={{
-                  padding: "15px",
-                  borderRadius: "5px",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  cursor: "pointer",
-                  "&:hover": {  
-                    backgroundColor: "#5C7373",
-                  },
-                }}
-                onClick={() => handleClick(carpeta)}
-              >
-                <img
-                  src='carpeta.png' // La URL de la imagen de la carpeta
-                  alt={carpeta.album_name} // Descripción de la imagen
-                  style={{
-                    width: "80px", // Asegura que la imagen ocupe todo el ancho del Box
-                    height: "80px", // Mantiene la proporción
-                  }}
-                />
-                 <Box sx={{ textAlign: "center" }}>
-                <Typography sx={{ color: "white" }}>
-                  {carpeta.album_name}
-                </Typography>
-              </Box>
-              </Box>
-             
+          </Box>
+
+          <Box
+            sx={{
+              display: "flex",
+              overflowY: "scroll",
+              flexDirection: "column",
+              alignItems: "center",
+              backgroundColor: "#011F26",
+              height: "60vh",
+              padding: "20px",
+            }}
+          >
+            <Grid container spacing={3} sx={{ maxWidth: "1000px" }}>
+              {albums.map((carpeta, index) => (
+                <Grid item xs={10} sm={6} md={2} key={index}>
+                  <Box
+                    sx={{
+                      padding: "15px",
+                      borderRadius: "5px",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      cursor: "pointer",
+                      "&:hover": {
+                        backgroundColor: "#5C7373",
+                      },
+                    }}
+                    onClick={() => handleClick(carpeta)}
+                  >
+                    <img
+                      src="carpeta.png" // La URL de la imagen de la carpeta
+                      alt={carpeta.album_name} // Descripción de la imagen
+                      style={{
+                        width: "80px", // Asegura que la imagen ocupe todo el ancho del Box
+                        height: "80px", // Mantiene la proporción
+                      }}
+                    />
+                    <Box sx={{ textAlign: "center" }}>
+                      <Typography sx={{ color: "white" }}>
+                        {carpeta.album_name}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Grid>
+              ))}
             </Grid>
-          ))}
-        </Grid>
-      </Box>
-
+          </Box>
+        </>
+      ) : (
+        <>
+          <Images carpeta={carpeta}  setSeeAlbum={setSeeAlbum}></Images>
+        </>
+      )}
     </Container>
   );
 };

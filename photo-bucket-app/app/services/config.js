@@ -6,5 +6,7 @@ export const ENDPOINTS = {
   UPDATE_USER: '/users/profile',
   REMOVE: '/users/delete',
   USER: '/users',
+  ALBUMS : '/albums',
+  ETIQUETAS: '/get-labels',
   LOGIN_FACE_RECOGNITION: '/users/facial-recognition/auth'
 };
