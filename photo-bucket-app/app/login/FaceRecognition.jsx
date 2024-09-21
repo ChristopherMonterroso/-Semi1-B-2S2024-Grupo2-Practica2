@@ -3,14 +3,16 @@ import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import styles from './FaceRecognition.module.css';
 import { loginWithFaceRecognition } from '../services/login';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
 
 const FaceRecognition = ({ onBackToLogin }) => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [imageData, setImageData] = useState(null);
   const [usernameOrEmail, setUsernameOrEmail] = useState('');
+  const router = useRouter();
 
-  // Función para acceder a la cámara
   useEffect(() => {
     const getVideoStream = async () => {
       try {
@@ -25,7 +27,6 @@ const FaceRecognition = ({ onBackToLogin }) => {
     getVideoStream();
   }, []);
 
-  // Captura la foto del video
   const capturePhoto = () => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
@@ -35,7 +36,6 @@ const FaceRecognition = ({ onBackToLogin }) => {
     toast.success('Foto capturada. Ahora puedes enviar el formulario.');
   };
 
-  // Envía la foto junto con el nombre de usuario/correo al backend
   const handleSubmit = async (event) => {
     event.preventDefault();
     
@@ -60,13 +60,13 @@ const FaceRecognition = ({ onBackToLogin }) => {
       }
 
       const data = await loginWithFaceRecognition(formData);
-      alert(data);
 
       if (data.status) {
-        toast.success('Inicio de sesión exitoso.');
-        // Redirige al usuario a la página de inicio u otra acción
+        localStorage.setItem('user', JSON.stringify(data));
+        Cookies.set('user', JSON.stringify(data), { expires: 1 });
+        router.push('/home');
       } else {
-        toast.error('Inicio de sesión fallido: ' + data.message);
+        toast.error(data.message);
       }
     } catch (error) {
       console.error('Error:', error);

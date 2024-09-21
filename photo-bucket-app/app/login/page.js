@@ -19,13 +19,16 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       const data = await login(usernameOrEmail, password);
-      toast.success('Inicio de sesión exitoso');
-      console.log('Login successful:', data);
-      localStorage.setItem('user', JSON.stringify(data));
-      Cookies.set('user', JSON.stringify(data), { expires: 1 });
-      router.push('/home'); // Redirigir a la página de inicio
+      if (data.status) {
+        localStorage.setItem('user', JSON.stringify(data));
+        Cookies.set('user', JSON.stringify(data), { expires: 1 });
+        router.push('/home'); // Redirigir a la página de inicio
+      } else {
+        toast.error(data.message);
+      }
+      
     } catch (error) {
-      toast.error('Credenciales incorrectas');
+      toast.error('Ocurrió un error, intente de nuevo.  ');
       console.error(error);
     }
   };
