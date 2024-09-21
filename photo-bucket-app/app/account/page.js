@@ -14,6 +14,10 @@ const Account = () => {
     router.push('/profile'); // Redirige a la página de inicio
   };
 
+  const handleGoToRemoveAccount = () => {
+    router.push('/remove'); // Redirige a la página de inicio
+  };
+
   return (
     <div className={styles.accountContainer}>
       <h2>Configuración de la cuenta</h2>
@@ -27,7 +31,9 @@ const Account = () => {
         <button className={styles.button}>
           Configurar reconocimiento facial
         </button>
-        <button className={styles.buttonDelete}>
+        <button className={styles.buttonDelete}
+          onClick={handleGoToRemoveAccount}
+        >
           Eliminar cuenta
         </button>
         <button className={styles.backButton} onClick={handleBackToHome}>

@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import EditAlbum from '../components/EditAlbum';
+import Albumnes from './../components/Albums';
 import TextExtractor from '../components/TextExtractor';
 import UploadImage from '../components/UploadImage';
 import styles from './HomePage.module.css';
@@ -71,6 +72,7 @@ const HomePage = () => {
               {selectedComponent === 'editAlbum' && <EditAlbum />}
               {selectedComponent === 'uploadImage' && <UploadImage />}
               {selectedComponent === 'textExtractor' && <TextExtractor />}
+              {selectedComponent === 'viewAlbums' && <Albumnes id_user={user.id_user} />}
               {/* Aquí puedes agregar más componentes según sea necesario */}
             </div>
             <button onClick={handleShowButtons} className={styles.backButton}>
