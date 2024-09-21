@@ -137,49 +137,38 @@ exports.updateUserProfile = async (req, res) => {
       const { id_user } = req.params;
       const { username, email, password } = req.body;
       if (!id_user) {
-        return res
-          .status(400)
-          .json({ message: "User ID is required", status: false });
+        return res.status(400).json({ message: "User ID is required", status: false });
       }
       if (!password) {
-        return res
-          .status(400)
-          .json({ message: "Please fill all fields", status: false });
+        return res.status(400).json({ message: "Please fill all fields", status: false });
       }
 
       const user = await User.findByPk(id_user);
       if (!user) {
-        return res
-          .status(404)
-          .json({ message: "User not found", status: false });
+        return res.status(404).json({ message: "User not found", status: false });
       }
       if (username) {
         const usernameExists = await User.findOne({ where: { username } });
         if (usernameExists) {
-          return res
-            .status(400)
-            .json({ message: "Username already exists", status: false });
+          return res.status(400).json({ message: "Username already exists", status: false });
         }
       }
       if (email) {
         const emailExists = await User.findOne({ where: { email } });
         if (emailExists) {
-          return res
-            .status(400)
-            .json({ message: "Email already exists", status: false });
+          return res.status(400).json({ message: "Email already exists", status: false });
         }
+      }
+
+      const match = await bcrypt.compare(password, user.password);
+      if (!match) {
+        return res.status(400).json({ message: "Invalid password", status: false });
       }
 
       const updateData = {};
       if (username) updateData.username = username;
       if (email) updateData.email = email;
-      if (!req.file) updateData.profile_image_url = user.profile_image_url;
-      const match = await bcrypt.compare(password, user.password);
-      if (!match) {
-        return res
-          .status(400)
-          .json({ message: "Invalid password", status: false });
-      }
+
       if (req.file) {
         const uploadParams = {
           Bucket: process.env.BUCKET_NAME,
@@ -189,22 +178,24 @@ exports.updateUserProfile = async (req, res) => {
         };
 
         const data = await s3.upload(uploadParams).promise();
-        user.profile_image_url = data.Location;
+        updateData.profile_image_url = data.Location;
+      } else {
+        updateData.profile_image_url = user.profile_image_url;
       }
-      await user.update(updateData, { where: { id_user: id_user } });
 
-      const getAlbum = await Album.findOne({ where: { id_user, album_name:"Fotos de perfil" } });
+      await user.update(updateData);
+
+      const getAlbum = await Album.findOne({ where: { id_user, album_name: "Fotos de perfil" } });
       await Image.create({
         image_name: "Foto de perfil",
         description: "Foto de perfil",
-        image_url: user.profile_image_url,
+        image_url: updateData.profile_image_url,
         id_album: getAlbum.id_album
       });
-      return res
-        .status(200)
-        .json({ message: "User updated successfully", status: true });
+
+      return res.status(200).json({ message: "User updated successfully", status: true });
     } catch (error) {
-      return res.status(500).json({ message: error, status: false });
+      return res.status(500).json({ message: error.message, status: false });
     }
   });
 };
