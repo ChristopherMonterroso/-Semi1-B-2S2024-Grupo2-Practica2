@@ -16,10 +16,6 @@ export const login = async (emailOrUsername, password) => {
             body: JSON.stringify(payload),
         });
 
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-
         const data = await response.json();
         return data; 
     } catch (error) {
@@ -35,10 +31,6 @@ export const loginWithFaceRecognition = async (formData) => {
             method: 'POST',
             body: formData,
         });
-
-        if (!response.ok) {
-            throw new Error('Error en el reconocimiento facial. Verifique los datos e inténtelo nuevamente.');
-        }
 
         const data = await response.json();
         return data;

@@ -1,24 +1,112 @@
 .loginContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 50px;
-  }
-  
-  .form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .input {
-    margin: 10px 0;
-    padding: 10px;
-    width: 300px;
-  }
-  
-  .button {
-    margin: 10px 0;
-    padding: 10px;
-    width: 300px;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #011F26;
+  color: white;
+  padding-top: 50px;
+}
+
+.title {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+}
+
+.input {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  font-size: 1rem;
+  width: 100%;
+  background-color: #5C7373;
+  border: none;
+  border-radius: 5px;
+  color: white;
+}
+
+.input::placeholder {
+  color: #B0C4C4;
+}
+
+.video {
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+}
+
+.button {
+  padding: 0.7rem 1.2rem;
+  font-size: 1rem;
+  background-color: #027368;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #025B50;
+}
+
+.backButton {
+  padding: 0.7rem 1.2rem;
+  font-size: 1rem;
+  background-color: #5C7373;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.backButton:hover {
+  background-color: #4A5A5A;
+}
+
+.centerText {
+  text-align: center;
+  font-size: 1rem; 
+  margin-top: 1rem;
+}
+
+.centerText a {
+  color: #1aa570; 
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.centerText a:hover {
+  color: #389613; 
+  text-decoration: underline; 
+}
+
+
+.videoContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.video {
+  border: 2px solid #ccc;
+  border-radius: 8px; 
+}
+
+.logo {
+  display: block;
+  margin: 20px auto; 
+  max-width: 100%; 
+  height: auto; 
+}
+
