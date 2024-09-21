@@ -11,13 +11,21 @@ const HomePage = () => {
   const [selectedComponent, setSelectedComponent] = useState(null);
   const [showButtons, setShowButtons] = useState(true);
   const [user, setUser] = useState(null); 
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
   const isLocal = process.env.NEXT_PUBLIC_HOST === 'local';
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem('user'))?.user;
-    setUser(storedUser);
-  }, []);
+    
+    if (!storedUser) {
+      const redirectUrl = isLocal ? '/login' : '/login.html';
+      router.push(redirectUrl);
+    } else {
+      setUser(storedUser);
+      setLoading(false);
+    }
+  }, [router, isLocal]);
 
   const handleComponentChange = (component) => {
     setSelectedComponent(component);
@@ -36,22 +44,20 @@ const HomePage = () => {
     router.push(redirectUrl);
   };
 
+  if (loading || !user) {
+    return null;
+  }
+
   return (
     <div className={styles.homePage}>
       <div className={styles.leftSide}>
-        {user ? (
-          <>
-            <img
-              src={user.profile_image_url}
-              alt="Profile"
-              className={styles.profileImage}
-            />
-            <h3>Nombre de usuario: {user.username}</h3>
-            <p>Correo electrónico: {user.email}</p>
-          </>
-        ) : (
-          <p>Cargando...</p>
-        )}
+        <img
+          src={user.profile_image_url}
+          alt="Profile"
+          className={styles.profileImage}
+        />
+        <h3>Nombre de usuario: {user.username}</h3>
+        <p>Correo electrónico: {user.email}</p>
       </div>
 
       <div className={styles.rightSide}>
@@ -85,7 +91,6 @@ const HomePage = () => {
               {selectedComponent === 'editAlbum' && <EditAlbum />}
               {selectedComponent === 'uploadImage' && <UploadImage />}
               {selectedComponent === 'textExtractor' && <TextExtractor />}
-              {/* Aquí puedes agregar más componentes según sea necesario */}
             </div>
             <button onClick={handleShowButtons} className={styles.backButton}>
               Regresar

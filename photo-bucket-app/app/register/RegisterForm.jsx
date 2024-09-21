@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { register } from '../services/register';
 import styles from './RegisterForm.module.css';
@@ -14,6 +14,17 @@ const RegisterForm = () => {
   const [profilePhoto, setProfilePhoto] = useState(null);
   const router = useRouter();
   const isLocal = process.env.NEXT_PUBLIC_HOST === 'local';
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    if (storedUser) {
+      const redirectUrl = isLocal ? '/home' : '/home.html';
+      router.push(redirectUrl);
+    } else {
+      setIsLoading(false);
+    }
+  }, [router, isLocal]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,6 +45,10 @@ const RegisterForm = () => {
       toast.error('Las contraseñas no coinciden');
     }
   };
+
+  if (isLoading) {
+    return null;
+  }
 
   return (
     <div className={styles.formContainer}>
@@ -74,8 +89,8 @@ const RegisterForm = () => {
         <button type="submit" className={styles.button}>Registrarse</button>
 
         <p className={styles.centerText}>
-            ¿Ya tienes cuenta? <a href={isLocal ? "/login" : "/login.html"}>Inicia sesión aquí</a>
-          </p>
+          ¿Ya tienes cuenta? <a href={isLocal ? "/login" : "/login.html"}>Inicia sesión aquí</a>
+        </p>
       </form>
     </div>
   );
