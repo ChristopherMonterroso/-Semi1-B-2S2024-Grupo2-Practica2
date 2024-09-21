@@ -13,6 +13,7 @@ const RegisterForm = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [profilePhoto, setProfilePhoto] = useState(null);
   const router = useRouter();
+  const isLocal = process.env.NEXT_PUBLIC_HOST === 'local';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,7 +21,8 @@ const RegisterForm = () => {
       try {
         const data = await register(username, email, password, profilePhoto);
         if (data.status) {
-          router.push('/login');
+          const redirectUrl = isLocal ? '/login' : '/login.html';
+          router.push(redirectUrl);
         } else {
           toast.error(data.message);
         }
@@ -72,7 +74,7 @@ const RegisterForm = () => {
         <button type="submit" className={styles.button}>Registrarse</button>
 
         <p className={styles.centerText}>
-            ¿Ya tienes cuenta? <a href="/login">Inicia sesión aquí</a>
+            ¿Ya tienes cuenta? <a href={isLocal ? "/login" : "/login.html"}>Inicia sesión aquí</a>
           </p>
       </form>
     </div>

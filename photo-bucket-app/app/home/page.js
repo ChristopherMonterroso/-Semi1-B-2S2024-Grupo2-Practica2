@@ -12,6 +12,7 @@ const HomePage = () => {
   const [showButtons, setShowButtons] = useState(true);
   const [user, setUser] = useState(null); 
   const router = useRouter();
+  const isLocal = process.env.NEXT_PUBLIC_HOST === 'local';
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem('user'))?.user;
@@ -31,7 +32,8 @@ const HomePage = () => {
   const handleLogout = () => {
     localStorage.removeItem('user');
     Cookies.remove('user');
-    router.push('/login');
+    const redirectUrl = isLocal ? '/login' : '/login.html';
+    router.push(redirectUrl);
   };
 
   return (
@@ -67,7 +69,10 @@ const HomePage = () => {
             <button onClick={() => handleComponentChange('textExtractor')} className={styles.button}>
               Extraer texto
             </button>
-            <button onClick={() => router.push('/account')} className={styles.button}>
+            <button 
+              onClick={() => router.push(isLocal ? '/account' : '/account.html')} 
+              className={styles.button}
+            >
               Configuración de la cuenta
             </button>
             <button onClick={handleLogout} className={styles.button}>
