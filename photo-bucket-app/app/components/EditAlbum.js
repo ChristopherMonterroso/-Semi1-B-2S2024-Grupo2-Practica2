@@ -52,7 +52,7 @@ const EditAlbum = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ album_name: albumName, id_user: 5 }),
+                body: JSON.stringify({ album_name: albumName, id_user: userCookie.id_user }),
             });
 
             const data = await response.json();

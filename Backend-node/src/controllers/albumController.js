@@ -9,12 +9,6 @@ exports.createAlbum = async (req, res) => {
             return res.status(400).json({ message: 'Please fill all fields', status: false });
         }
 
-        const albumExists = await Album.findOne({ where: { album_name } });
-
-        if (albumExists) {
-            return res.status(400).json({ message: 'Album already exists', status: false });
-        }
-
         const album = await Album.create({
             album_name,
             id_user

@@ -14,11 +14,6 @@ def createAlbum():
         if not album_name or not id_user:
             return jsonify({"message": "Please fill all fields", "status": False}), 400
 
-        # Verificar si el álbum ya existe
-        album_exists = db.query(Album).filter_by(album_name=album_name).first()
-        if album_exists:
-            return jsonify({"message": "Album already exists", "status": False}), 400
-
         # Crear el nuevo álbum
         new_album = Album(album_name=album_name, id_user=id_user)
         db.add(new_album)
