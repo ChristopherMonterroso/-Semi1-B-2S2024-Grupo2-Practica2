@@ -14,6 +14,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [isFaceRecognition, setIsFaceRecognition] = useState(false);
   const router = useRouter();
+  const isLocal = process.env.NEXT_PUBLIC_HOST === 'local';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,7 +23,8 @@ const LoginPage = () => {
       if (data.status) {
         localStorage.setItem('user', JSON.stringify(data));
         Cookies.set('user', JSON.stringify(data), { expires: 1 });
-        router.push('/home');
+        const redirectUrl = isLocal ? '/home' : '/home.html';
+        router.push(redirectUrl);
       } else {
         toast.error(data.message);
       }
@@ -69,7 +71,7 @@ const LoginPage = () => {
             Utilizar reconocimiento facial
           </button>
           <p className={styles.centerText}>
-            ¿No tienes una cuenta? <a href="/register">Regístrate aquí</a>
+            ¿No tienes una cuenta? <a href={isLocal ? "/register" : "/register.html"}>Regístrate aquí</a>
           </p>
         </form>
       ) : (

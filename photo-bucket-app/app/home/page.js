@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import EditAlbum from '../components/EditAlbum';
 import TextExtractor from '../components/TextExtractor';
 import UploadImage from '../components/UploadImage';
@@ -9,10 +9,15 @@ import Cookies from 'js-cookie';
 
 const HomePage = () => {
   const [selectedComponent, setSelectedComponent] = useState(null);
-  const [showButtons, setShowButtons] = useState(true); 
-  const router = useRouter(); 
+  const [showButtons, setShowButtons] = useState(true);
+  const [user, setUser] = useState(null); 
+  const router = useRouter();
+  const isLocal = process.env.NEXT_PUBLIC_HOST === 'local';
 
-  const user = JSON.parse(localStorage.getItem('user'))?.user;
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem('user'))?.user;
+    setUser(storedUser);
+  }, []);
 
   const handleComponentChange = (component) => {
     setSelectedComponent(component);
@@ -27,19 +32,26 @@ const HomePage = () => {
   const handleLogout = () => {
     localStorage.removeItem('user');
     Cookies.remove('user');
-    router.push('/login');
+    const redirectUrl = isLocal ? '/login' : '/login.html';
+    router.push(redirectUrl);
   };
 
   return (
     <div className={styles.homePage}>
       <div className={styles.leftSide}>
-        <img
-          src={user?.profile_image_url}
-          alt="Profile"
-          className={styles.profileImage}
-        />
-        <h3>Nombre de usuario: {user?.username}</h3>
-        <p>Correo electrónico: {user?.email}</p>
+        {user ? (
+          <>
+            <img
+              src={user.profile_image_url}
+              alt="Profile"
+              className={styles.profileImage}
+            />
+            <h3>Nombre de usuario: {user.username}</h3>
+            <p>Correo electrónico: {user.email}</p>
+          </>
+        ) : (
+          <p>Cargando...</p>
+        )}
       </div>
 
       <div className={styles.rightSide}>
@@ -57,7 +69,10 @@ const HomePage = () => {
             <button onClick={() => handleComponentChange('textExtractor')} className={styles.button}>
               Extraer texto
             </button>
-            <button onClick={() => router.push('/account')} className={styles.button}>
+            <button 
+              onClick={() => router.push(isLocal ? '/account' : '/account.html')} 
+              className={styles.button}
+            >
               Configuración de la cuenta
             </button>
             <button onClick={handleLogout} className={styles.button}>
@@ -70,7 +85,7 @@ const HomePage = () => {
               {selectedComponent === 'editAlbum' && <EditAlbum />}
               {selectedComponent === 'uploadImage' && <UploadImage />}
               {selectedComponent === 'textExtractor' && <TextExtractor />}
-              {/* Aquí se puede agregar más componentes según sea necesario */}
+              {/* Aquí puedes agregar más componentes según sea necesario */}
             </div>
             <button onClick={handleShowButtons} className={styles.backButton}>
               Regresar

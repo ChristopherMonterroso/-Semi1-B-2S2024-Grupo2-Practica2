@@ -4,10 +4,11 @@ import styles from './Account.module.css';
 
 const Account = () => {
   const router = useRouter();
+  const isLocal = process.env.NEXT_PUBLIC_HOST === 'local';
 
-  // Función para regresar a la página de inicio
   const handleBackToHome = () => {
-    router.push('/home'); // Redirige a la página de inicio
+    const redirectUrl = isLocal ? '/home' : '/home.html';
+    router.push(redirectUrl);
   };
 
   return (
