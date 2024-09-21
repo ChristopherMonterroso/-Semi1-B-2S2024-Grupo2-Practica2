@@ -27,7 +27,7 @@ const EditAlbum = () => {
     }
 
     const fetchAlbums = async () => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/${userCookie.id_user}/albums`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/${user.user.id_user}/albums`);
         const data = await response.json();
         if (data.status) {
             setAlbums(data.albums);
@@ -52,7 +52,7 @@ const EditAlbum = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ album_name: albumName, id_user: userCookie.id_user }),
+                body: JSON.stringify({ album_name: albumName, id_user: user.user.id_user }),
             });
 
             const data = await response.json();
