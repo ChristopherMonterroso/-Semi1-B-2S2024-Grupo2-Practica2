@@ -179,7 +179,7 @@ const ProfilePage = () => {
             <button className={styles.button} onClick={handleEdit}>
               Editar Perfil
             </button>
-            <button className={styles.button} onClick={handleRegresar}>
+            <button className={`${styles.button} ${styles.cancelButton}`} onClick={handleRegresar}>
               Regresar
             </button>
           </>

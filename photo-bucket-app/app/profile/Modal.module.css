@@ -42,3 +42,11 @@
     cursor: pointer;
   }
   
+
+  .cancelButton {
+    background-color: #28a745; /* Botón de cancelar en un tono gris oscuro */
+  }
+  
+  .cancelButton:hover {
+    background-color: #218838; /* Hover más oscuro para el botón de cancelar */
+  }

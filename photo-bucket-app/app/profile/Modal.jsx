@@ -18,7 +18,7 @@ const Modal = ({ onClose, onSubmit, password, setPassword }) => {
           <button className={styles.button} onClick={onSubmit}>
             Confirmar
           </button>
-          <button className={styles.button} onClick={onClose}>
+          <button className={`${styles.button} ${styles.cancelButton}`} onClick={onClose}>
             Cancelar
           </button>
         </div>
