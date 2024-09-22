@@ -9,5 +9,7 @@ export const ENDPOINTS = {
   ALBUMS : '/albums',
   ETIQUETAS: '/get-labels',
   TRANSLATE: '/translate-text',
+  RECOGNITION: '/users/facial-recognition/data',
+  UPDATE_RECOGNITION: '/users/facial-recognition/update',
   LOGIN_FACE_RECOGNITION: '/users/facial-recognition/auth'
 };

@@ -11,7 +11,7 @@ const Account = () => {
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem('user'))?.user || Cookies.get('user');
-    
+
     if (!storedUser) {
       const redirectUrl = isLocal ? '/login' : '/login.html';
       router.push(redirectUrl);
@@ -30,11 +30,18 @@ const Account = () => {
   }
 
   const handleGoToProfile = () => {
-    router.push('/profile'); // Redirige a la página de inicio
+    const redirectUrl = isLocal ? '/profile' : '/profile.html';
+    router.push(redirectUrl);
   };
 
   const handleGoToRemoveAccount = () => {
-    router.push('/remove'); // Redirige a la página de inicio
+    const redirectUrl = isLocal ? '/remove' : '/remove.html';
+    router.push(redirectUrl);
+  };
+
+  const handleGoToSettingAccount = () => {
+    const redirectUrl = isLocal ? '/settingface' : '/settingface.html';
+    router.push(redirectUrl);
   };
 
   return (
@@ -47,7 +54,9 @@ const Account = () => {
         >
           Editar información personal
         </button>
-        <button className={styles.button}>
+        <button className={styles.button}
+          onClick={handleGoToSettingAccount}
+          >
           Configurar reconocimiento facial
         </button>
         <button className={styles.buttonDelete}

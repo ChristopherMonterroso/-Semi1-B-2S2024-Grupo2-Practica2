@@ -19,18 +19,30 @@ const ProfilePage = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const isLocal = process.env.NEXT_PUBLIC_HOST === "local";
+  const [isLoading, setIsLoading] = useState(true);
+
+
+
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"))?.user;
+    const storedUser = JSON.parse(localStorage.getItem("user"))?.user || Cookies.get("user");
     // console.log("Stored User:", storedUser);
-    if (storedUser) {
+    if (!storedUser) {
+      const redirectUrl = isLocal ? "/login" : "/login.html";
+      router.push(redirectUrl);
+    } else {
       setUser(storedUser);
       setUsername(storedUser.username);
       // setLastName(storedUser.lastName);
       setEmail(storedUser.email);
       setProfilePhoto(storedUser.profile_image_url);
+
+      setIsLoading(false);
     }
-  }, []);
+
+
+  }, [router, isLocal]);
 
   const Iniciosesion = async () => {
     try {
@@ -58,7 +70,8 @@ const ProfilePage = () => {
   };
 
   const handleRegresar = () => {
-    router.push("/account");
+    const redirectUrl = isLocal ? "/account" : "/account.html";
+    router.push(redirectUrl);
   };
 
   const handleCancel = () => {
@@ -119,6 +132,10 @@ const ProfilePage = () => {
       setIsEditable(false);
     }
   };
+
+  if (isLoading) {
+    return null;
+  }
 
   return (
     <div className={styles.profileContainer}>
