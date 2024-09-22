@@ -41,7 +41,6 @@ const FaceRecognition = () => {
   }, [router, isLocal]);
 
   const GetFaceRecognition = async (id) => {
-   
     try {
       const data = await GetRecognition(id);
       if (data.status) {
@@ -88,15 +87,15 @@ const FaceRecognition = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!imageData) {
-      toast.error(
-        "Por favor captura una foto y proporciona un nombre de usuario/correo electrónico."
-      );
-      return;
-    }
-
     try {
       const formData = new FormData();
+
+      if (!imageData) {
+        toast.error(
+          "Por favor captura una foto y proporciona un nombre de usuario/correo electrónico."
+        );
+        return;
+      }
       const blob = await fetch(imageData).then((res) => res.blob());
       const file = new File([blob], "photo.jpg", { type: "image/jpeg" });
 
@@ -105,7 +104,7 @@ const FaceRecognition = () => {
       formData.append("status", isOn);
 
       const data = await updateFaceRecog(user.id_user, formData);
-    
+
       if (data.status) {
         toast.success("Reconocimiento facial actualizado correctamente.");
         const redirectUrl = isLocal ? "/account" : "/account.html";
