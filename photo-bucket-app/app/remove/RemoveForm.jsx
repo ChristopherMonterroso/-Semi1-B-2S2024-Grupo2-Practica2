@@ -8,21 +8,28 @@ import Cookies from "js-cookie";
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
-
+  
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const router = useRouter();
+  const isLocal = process.env.NEXT_PUBLIC_HOST === "local";
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"))?.user;
-    // console.log("Stored User:", storedUser);
-    if (storedUser) {
+    const storedUser = JSON.parse(localStorage.getItem("user"))?.user || Cookies.get("user");
+
+    if (!storedUser) {
+      const redirectUrl = isLocal ? "/login" : "/login.html";
+      router.push(redirectUrl);
+    } else {
       setUser(storedUser);
+      setIsLoading(false);
     }
-  }, []);
+  }, [router, isLocal]);
 
   const handleRegresar = () => {
-    router.push("/account");
+    const redirectUrl = isLocal ? "/account" : "/account.html";
+    router.push(redirectUrl);
   };
 
   const handleRemove = async () => {
@@ -34,7 +41,9 @@ const ProfilePage = () => {
       if (result.status) {
         localStorage.removeItem("user");
         Cookies.remove("user");
-        router.push("/login");
+        // router.push("/login");
+        // const redirectUrl = isLocal ? "/login" : "/login.html";
+        // router.push(redirectUrl);
       } else {
         setError(`Ocurrió un error. ${result.message}`);
       }
@@ -42,6 +51,10 @@ const ProfilePage = () => {
       setError("Error al eliminar la cuenta. Intente de nuevo.");
     }
   };
+
+  if (isLoading) {
+    return null;
+  }
 
   return (
     <div className={styles.profileContainer}>
