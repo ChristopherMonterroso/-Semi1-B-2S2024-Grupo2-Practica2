@@ -30,7 +30,7 @@ const UploadImage = () => {
 
     useEffect(() => {
         const fetchAlbums = async () => {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/${userCookie.id_user}/albums`);
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/${user.user.id_user}/albums`);
             const data = await response.json();
             if (data.status) {
                 setAlbums(data.albums);

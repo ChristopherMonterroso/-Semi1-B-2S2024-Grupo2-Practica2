@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { login } from '../services/login';
 import styles from './LoginPage.module.css';
 import FaceRecognition from './FaceRecognition';
@@ -13,8 +13,19 @@ const LoginPage = () => {
   const [usernameOrEmail, setUsernameOrEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isFaceRecognition, setIsFaceRecognition] = useState(false);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
   const isLocal = process.env.NEXT_PUBLIC_HOST === 'local';
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem('user'))?.user;
+    if (storedUser) {
+      const redirectUrl = isLocal ? '/home' : '/home.html';
+      router.push(redirectUrl);
+    } else {
+      setLoading(false);
+    }
+  }, [router, isLocal]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,7 +39,6 @@ const LoginPage = () => {
       } else {
         toast.error(data.message);
       }
-      
     } catch (error) {
       toast.error('Ocurrió un error, intente de nuevo.');
       console.error(error);
@@ -42,6 +52,10 @@ const LoginPage = () => {
   const handleBackToLogin = () => {
     setIsFaceRecognition(false);
   };
+
+  if (loading) {
+    return null;
+  }
 
   return (
     <div className={styles.loginContainer}>
