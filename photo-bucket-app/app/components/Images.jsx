@@ -47,6 +47,7 @@ const Images = ({ carpeta, setSeeAlbum }) => {
 
   const getetiquetas = async () => {
     try {
+      // obtener la img con axios para poder meterlo al formData
       const response = await axios({
         url: imageFile.image_url,
         method: "GET",
