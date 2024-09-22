@@ -60,6 +60,25 @@ Para garantizar un acceso seguro y segmentado a los servicios de AWS, se crearon
      * ![webpage2](images/ManualTecnico/webpage2.png)
    * **Captura:**
      * ![webpage3](images/ManualTecnico/webpage3.png)
+   * **Captura:**
+     * ![webpage4](images/ManualTecnico/Profile.png)
+   * **Captura:**
+     * ![webpage5](images/ManualTecnico/updateface.png)
+   * **Captura:**
+     * ![webpage6](images/ManualTecnico/remove.png)
+   * **Captura:**
+     * ![webpage7](images/ManualTecnico/albums.png)
+   * **Captura:**
+     * ![webpage8](images/ManualTecnico/fotos.png)
+   * **Captura:**
+     * ![webpage9](images/ManualTecnico/visuFoto.png)
+
+
+
+
+
+
+
 
 
 2. **Bucket almacenamiento multimedia:**
