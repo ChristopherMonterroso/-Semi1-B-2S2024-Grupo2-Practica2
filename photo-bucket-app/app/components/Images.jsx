@@ -15,13 +15,18 @@ import {
   Grid,
 } from "@mui/material";
 import { etiquetas } from "../services/etiquetas";
-const axios = require('axios');
+import { GetImages } from "../services/images";
+import { translate } from "../services/translate";
 
+const axios = require("axios");
 
 const Images = ({ carpeta, setSeeAlbum }) => {
   const [images, setImages] = useState([]);
   const [openmodel, setOpenModel] = useState(false);
   const [imageFile, setImageFile] = useState(null);
+  const [langtrans, setLangTrans] = useState([]);
+  const [currentLang, setCurrentLang] = useState("");
+
   useEffect(() => {
     getimages();
   }, []);
@@ -40,23 +45,18 @@ const Images = ({ carpeta, setSeeAlbum }) => {
     }
   };
 
-
   const getetiquetas = async () => {
     try {
-
-
       const response = await axios({
         url: imageFile.image_url,
-        method: 'GET',
-        responseType: 'arraybuffer',
+        method: "GET",
+        responseType: "arraybuffer",
       });
 
-
       const formData = new FormData();
-      formData.append('image', Buffer.from(response.data));
+      formData.append("image", Buffer.from(response.data));
 
-
-
+      cnosole.log(formData);
 
       const result = await etiquetas(formData);
       console.log(result);
@@ -70,13 +70,31 @@ const Images = ({ carpeta, setSeeAlbum }) => {
     }
   };
 
+  const getLangueje = async (imagen) => {
+    try {
+      const result = await translate(imagen.description);
+      console.log(result);
+      if (result.status) {
+        console.error("No se logro traduccion");
+        return;
+      } else {
+        setLangTrans(result.translations);
+      }
+    } catch (error) {
+      console.error("Error al traducir", error);
+    }
+  };
+
   const handleClick = (imagen) => {
+    getLangueje(imagen);
     setImageFile(imagen);
-    getetiquetas();
+    // getetiquetas();
     handleModel();
   };
 
   const handleModel = () => {
+    setAge("");
+    setCurrentLang("");
     setOpenModel(!openmodel);
   };
 
@@ -88,6 +106,13 @@ const Images = ({ carpeta, setSeeAlbum }) => {
 
   const handleChange = (event) => {
     setAge(event.target.value);
+    if (event.target.value == 1) {
+      setCurrentLang(langtrans[0].translatedText);
+    } else if (event.target.value == 2) {
+      setCurrentLang(langtrans[1].translatedText);
+    } else if (event.target.value == 3) {
+      setCurrentLang(langtrans[2].translatedText);
+    }
   };
 
   return (
@@ -283,7 +308,9 @@ const Images = ({ carpeta, setSeeAlbum }) => {
                 }}
               >
                 <Typography sx={{ mb: 1, fontStyle: "italic" }}>
-                  {imageFile.description}
+                  {imageFile ? imageFile.description : "No hay descripcion"}
+
+                  {/* {imageFile.description} */}
                 </Typography>
               </Box>
               <Box>
@@ -296,27 +323,22 @@ const Images = ({ carpeta, setSeeAlbum }) => {
                     label="Age"
                     onChange={handleChange}
                   >
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
+                    <MenuItem value={1}>Ingles</MenuItem>
+                    <MenuItem value={2}>Frances</MenuItem>
+                    <MenuItem value={3}>Aleman</MenuItem>
                   </Select>
                 </FormControl>
               </Box>
-
-              <Button
-                variant="contained"
-                // onClick={handleExtractText}
+              <Box
                 sx={{
-                  backgroundColor: "#027368",
-                  color: "white",
-                  mt: 2,
-                  "&:hover": {
-                    backgroundColor: "#027368cc",
-                  },
+                  height: "70px",
+                  padding: "10px",
                 }}
               >
-                Extraer texto
-              </Button>
+                <Typography sx={{ mb: 1, fontStyle: "italic" }}>
+                  {currentLang}
+                </Typography>
+              </Box>
             </Box>
           </Box>
         </Box>

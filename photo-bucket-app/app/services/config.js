@@ -8,5 +8,6 @@ export const ENDPOINTS = {
   USER: '/users',
   ALBUMS : '/albums',
   ETIQUETAS: '/get-labels',
+  TRANSLATE: '/translate-text',
   LOGIN_FACE_RECOGNITION: '/users/facial-recognition/auth'
 };
